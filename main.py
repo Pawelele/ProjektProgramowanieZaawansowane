@@ -9,20 +9,11 @@ from pydantic import BaseModel
 from matplotlib import pyplot as plt
 
 fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
+    "janNowak": {
+        "username": "janNowak",
         "hashed_password": "fakehashedsecret",
         "disabled": False,
-    },
-    "alice": {
-        "username": "alice",
-        "full_name": "Alice Wonderson",
-        "email": "alice@example.com",
-        "hashed_password": "fakehashedsecret2",
-        "disabled": True,
-    },
+    }
 }
 
 app = FastAPI()
@@ -32,12 +23,12 @@ def print_hi(name):
     print(f'Hi, {name}')
 
 @app.get("/prime/{number}", status_code=200)
-async def read_foods(number: int):
+async def check_prime(number: int):
     return sympy.isprime(number)
 
 
-@app.post("/picture/invert/", status_code=201)
-def upload(file: UploadFile = File(...)):
+@app.post("/picture/invert", status_code=201)
+def invert(file: UploadFile = File(...)):
     image = file.read()
     npAr = np.frombuffer(image, np.uint8)
     imagev2 = cv2.imdecode(npAr, cv2.IMREAD_COLOR)
