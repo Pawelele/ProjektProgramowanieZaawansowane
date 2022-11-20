@@ -6,7 +6,6 @@ import numpy as np
 from typing import Union
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from matplotlib import pyplot as plt
 
 fake_users_db = {
     "janNowak": {
