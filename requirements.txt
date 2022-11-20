@@ -1,5 +1,5 @@
 fastapi
-uvicorn[standard]
+uvicorn
 sympy
 python-multipart
 opencv-python-headless
