@@ -2,5 +2,5 @@ fastapi
 uvicorn[standard]
 sympy
 python-multipart
-opencv-python
+opencv-python-headless
 
