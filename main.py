@@ -1,3 +1,6 @@
+import base64
+import io
+
 import sympy
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException, status
 import cv2
@@ -6,6 +9,7 @@ import numpy as np
 from typing import Union
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
+from starlette.responses import StreamingResponse
 
 fake_users_db = {
     "janNowak": {
@@ -27,14 +31,22 @@ async def check_prime(number: int):
 
 
 @app.post("/picture/invert", status_code=201)
-def invert(file: UploadFile = File(...)):
-    image = file.read()
+async def invert(file: UploadFile = File(...)):
+    image = await file.read()
     npAr = np.frombuffer(image, np.uint8)
     imagev2 = cv2.imdecode(npAr, cv2.IMREAD_COLOR)
     invertedImg = cv2.bitwise_not(imagev2)
-    return invertedImg;
+    retval, buffer = cv2.imencode('.png', invertedImg)
+    return StreamingResponse(io.BytesIO(buffer.tobytes()), media_type="image/png")
 
-# OAuth
+@app.post("/picture/invert")
+async def invert_picture_colors(file: UploadFile = File(...)):
+    content = await file.read()
+    nparr = np.frombuffer(content, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    img_inverted = cv2.bitwise_not(img)
+    retval, buffer = cv2.imencode('.jpg', img_inverted)
+
 
 def fake_hash_password(password: str):
     return "fakehashed" + password
