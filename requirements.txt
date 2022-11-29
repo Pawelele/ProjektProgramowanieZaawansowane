@@ -3,4 +3,8 @@ uvicorn
 sympy
 python-multipart
 opencv-python-headless
+starlette
+pydantic
+numpy
+opencv-python
 

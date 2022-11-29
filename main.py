@@ -1,6 +1,4 @@
-import base64
 import io
-
 import sympy
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException, status
 import cv2
@@ -112,8 +110,3 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 @app.get("/time")
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return datetime.datetime.now()
-
-
-
-if __name__ == '__main__':
-    print_hi('PyCharm')
