@@ -35,16 +35,6 @@ async def invert(file: UploadFile = File(...)):
     return StreamingResponse(io.BytesIO(buffer.tobytes()), media_type="image/png")
 
 
-@app.post("/picture/invert")
-async def invert_picture_colors(file: UploadFile = File(...)):
-    content = await file.read()
-    nparr = np.frombuffer(content, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    img_inverted = cv2.bitwise_not(img)
-    retval, buffer = cv2.imencode('.png', img_inverted)
-    return StreamingResponse(io.BytesIO(buffer.tobytes()), media_type="image/png")
-
-
 def fake_hash_password(password: str):
     return "fakehashed" + password
 
