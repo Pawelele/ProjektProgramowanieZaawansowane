@@ -3,7 +3,7 @@ import sympy
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException, status
 import cv2
 import datetime
-import numpy as np
+import numpy
 from typing import Union
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
@@ -28,10 +28,10 @@ async def check_prime(number: int):
 @app.post("/picture/invert", status_code=201)
 async def invert(file: UploadFile = File(...)):
     image = await file.read()
-    npAr = np.frombuffer(image, np.uint8)
-    imagev2 = cv2.imdecode(npAr, cv2.IMREAD_COLOR)
-    invertedImg = cv2.bitwise_not(imagev2)
-    retval, buffer = cv2.imencode('.png', invertedImg)
+    np_array = numpy.frombuffer(image, numpy.uint8)
+    new_image = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
+    inverted_img = cv2.bitwise_not(new_image)
+    retval, buffer = cv2.imencode('.png', inverted_img)
     return StreamingResponse(io.BytesIO(buffer.tobytes()), media_type="image/png")
 
 
@@ -60,8 +60,6 @@ def get_user(db, username: str):
 
 
 def fake_decode_token(token):
-    # This doesn't provide any security at all
-    # Check the next version
     user = get_user(fake_users_db, token)
     return user
 
@@ -97,5 +95,5 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 @app.get("/time")
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
+async def get_time(current_user: User = Depends(get_current_active_user)):
     return datetime.datetime.now()
