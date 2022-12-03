@@ -95,5 +95,5 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 @app.get("/time")
-async def get_time():
+async def get_time(current_user: User = Depends(get_current_active_user)):
     return datetime.datetime.now()
